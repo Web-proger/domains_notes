@@ -23,7 +23,7 @@ node_modules
 
 /.idea
 
-/data/db/*
+/db/*
 
 /build/*
 !/build/.gitkeep
