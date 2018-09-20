@@ -14,8 +14,7 @@ let db = new sqlite3.Database('./db/database.sqlite', sqlite3.OPEN_READWRITE, (e
     console.log('Connected to the in-memory SQlite database.');
 });
 
-const sequelize = new Sequelize('database', 'username', 'password', {
-    host: 'localhost',
+const sequelize = new Sequelize('domains', 'username', 'password', {
     dialect: 'sqlite',
 
     pool: {
@@ -26,10 +25,16 @@ const sequelize = new Sequelize('database', 'username', 'password', {
     },
 
     storage: './db/database.sqlite',
-
-    // http://docs.sequelizejs.com/manual/tutorial/querying.html#operators
-    operatorsAliases: false
 });
+
+sequelize
+    .authenticate()
+    .then(() => {
+        console.log('Connection has been established successfully.');
+    })
+    .catch(err => {
+        console.error('Unable to connect to the database:', err);
+    });
 
 /*** Домашняя страница ***/
 router.get('/', function(req, res, next) {
@@ -45,7 +50,13 @@ router.post('/ajax', function(req, res, next) {
 //  var file = fs.readFileSync('public/db.txt');
 //  fs.writeFileSync('public/db.txt', file + line);
 //  res.send({'ip': req.ip, host: req.hostname});
-    console.log(req.body.domain);
+    function query(data) {
+
+        return
+    }
+
+
+    console.log(req.body);
     res.send('Даные дошли');
 });
 

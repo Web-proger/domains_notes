@@ -7,4 +7,4 @@ let db = new sqlite3.Database('./db/database.sqlite', (err) => {
     console.log('db create.');
 });
 
-db.run('CREATE TABLE domains(domain text)');
+db.run("CREATE TABLE IF NOT EXISTS domains(`id` INTEGER PRIMARY KEY AUTOINCREMENT, 'domain' TEXT NOT NULL, 'create_date' TEXT, 'flow' text)");
