@@ -6,21 +6,10 @@ const path = require('path');
 const sqlite3 = require('sqlite3').verbose();  // Отключить на продакшене
 const Sequelize = require('sequelize');
 
-/*** Создаем db ***/
-let db = new sqlite3.Database('./db/database.sqlite', sqlite3.OPEN_READWRITE, (err) => {
-    if (err) {
-        return console.error(err.message);
-    }
-    console.log('Connected to the in-memory SQlite database.');
-});
+//create sqlite db file
+const sequelize = new Sequelize('sqlite:./db/database.sqlite');
 
-// const sequelize = new Sequelize('sqlite:./db/database.sqlite'); // Сокращенный вариант
-const sequelize = new Sequelize('domains', 'null', 'null', {
-    dialect: 'sqlite',
-    storage: './db/database.sqlite'
-});
-
-/*model*/
+/*create model*/
 const Domains = sequelize.define('domains', {
     id: {
         type: Sequelize.INTEGER,
@@ -39,6 +28,7 @@ const Domains = sequelize.define('domains', {
     }
 });
 
+// sync model with db
 Domains.sync().then(() => {
     console.log('db готова к работе');
 });
@@ -50,21 +40,14 @@ router.get('/', function(req, res, next) {
 
 /*** Добавление в базу ***/
 router.post('/ajax', function(req, res, next) {
-    var line =  'Домен: ' + req.body.domain
-                + ', Дата регистрации: ' + req.body.date
-                + ', Поток: ' + req.body.group
-                + '\n';
-//  var file = fs.readFileSync('public/db.txt');
-//  fs.writeFileSync('public/db.txt', file + line);
-//  res.send({'ip': req.ip, host: req.hostname});
-    function query(data) {
-
-        return
-    }
-
+    Domains.create({
+        domain: req.body.domain,
+        create_date: req.body.date,
+        flow: req.body.group
+    });
 
     console.log(req.body);
-    res.send('Даные дошли');
+    res.send(req.body.domain);
 });
 
 module.exports = router;
