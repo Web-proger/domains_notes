@@ -14,27 +14,34 @@ let db = new sqlite3.Database('./db/database.sqlite', sqlite3.OPEN_READWRITE, (e
     console.log('Connected to the in-memory SQlite database.');
 });
 
-const sequelize = new Sequelize('domains', 'username', 'password', {
+// const sequelize = new Sequelize('sqlite:./db/database.sqlite'); // Сокращенный вариант
+const sequelize = new Sequelize('domains', 'null', 'null', {
     dialect: 'sqlite',
-
-    pool: {
-        max: 5,
-        min: 0,
-        acquire: 30000,
-        idle: 10000
-    },
-
-    storage: './db/database.sqlite',
+    storage: './db/database.sqlite'
 });
 
-sequelize
-    .authenticate()
-    .then(() => {
-        console.log('Connection has been established successfully.');
-    })
-    .catch(err => {
-        console.error('Unable to connect to the database:', err);
-    });
+/*model*/
+const Domains = sequelize.define('domains', {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    domain: {
+        type: Sequelize.TEXT,
+        allowNull: false
+    },
+    create_date: {
+        type: Sequelize.TEXT
+    },
+    flow: {
+        type: Sequelize.TEXT
+    }
+});
+
+Domains.sync().then(() => {
+    console.log('db готова к работе');
+});
 
 /*** Домашняя страница ***/
 router.get('/', function(req, res, next) {
